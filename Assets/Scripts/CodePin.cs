@@ -5,21 +5,26 @@ using UnityEngine;
 
 /// <summary>
 /// Representa un pin donde el jugador coloca un color como apuesta.
-/// Guarda el color visual y su valor numérico asociado.
+/// Guarda el color visual y su valor numï¿½rico asociado.
 /// </summary>
 public class CodePin : MonoBehaviour
 {
     private SpriteRenderer sr;
     private int colorCode;
+    private void Start()
+    {
+        sr = GetComponent<SpriteRenderer>();
+        
+    }
     private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
     }
     /// <summary>
-    /// Establece el color visual del pin y guarda el código numérico.
+    /// Establece el color visual del pin y guarda el cï¿½digo numï¿½rico.
     /// </summary>
     /// <param name="color">Color a mostrar</param>
-    /// <param name="code">Código del color (1 a 6)</param>
+    /// <param name="code">Cï¿½digo del color (1 a 6)</param>
     public void SetColor(Color color, int code)
     {
         sr.color = color;
@@ -27,7 +32,7 @@ public class CodePin : MonoBehaviour
     }
 
     /// <summary>
-    /// Devuelve el código del color asignado.
+    /// Devuelve el cï¿½digo del color asignado.
     /// </summary>
     public int GetColorCode()
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TurnController : MonoBehaviour
 {
@@ -95,19 +96,26 @@ public class TurnController : MonoBehaviour
         }
          // 1. Bloquear turno actual
         boardManagerInstance.SwitchBetTurn(false);
+       // boardManagerInstance.GlowTurn(boardManagerInstance.betTurns.(boardManagerInstance.currentTurnIndex),false)
+        // 1B "Apagar" turno actual
+        // metodo para resaltar de alguna forma el turno activo
+        // boardManagerInstance.GlowTurn(false);
+
         // 2. Avanzar turno
         gameControllerInstance.currentTurnIndex++;
         // 3. Activar siguiente turno si no hemos llegado al límite
+        GameObject currentTurnObjet = GameObject.Find("Turn_" + gameControllerInstance.currentTurnIndex);
         if (gameControllerInstance.currentTurnIndex < boardManagerInstance.GetMaxTurn())
         {
             boardManagerInstance.SwitchBetTurn(true);
+            boardManagerInstance.GlowTurn(currentTurnObjet,true);
+            // metodo para resaltar de alguna forma el turno activo
+            // boardManagerInstance.GlowTurn(true);
         }
         else
         {
             boardManagerInstance.SecretCodeCoverSwitch();
             gameControllerInstance.EndGameVictory(false);
-            
-
             // Aquí se puede desactivar botón o notificar al GameController
         }
     }

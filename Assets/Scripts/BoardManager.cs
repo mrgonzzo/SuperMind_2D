@@ -4,6 +4,7 @@ using Unity.Burst.CompilerServices;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 using UnityEngine.SceneManagement;
+using System;
 
 /// <summary>
 /// Se encarga de gestionar el tablero de juego: generación del código secreto,
@@ -55,7 +56,9 @@ public class BoardManager : MonoBehaviour
         DrawSecretCode(secretCode);
 
         // Activa el collider de Turn_0 (para permitir interacción)
-        GameObject currentTurnObjet = GameObject.Find("Turn_0");
+        GameObject currentTurnObjet = GameObject.Find("Turn_" + gameControllerInstance.currentTurnIndex);
+       // metodo para resaltar el turno activo
+        GlowTurn(currentTurnObjet, true);
         // Activa todos los colliders de los CodePin dentro del turno actual
         foreach (Collider2D col in currentTurnObjet.GetComponentsInChildren<Collider2D>())
         {
@@ -124,6 +127,46 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resaltar el turno activo
+    /// </summary>
+    public void GlowTurn(GameObject currentTurn, Boolean glow)
+    {
+        Debug.Log("dentro de glowturn: glow vale: " + glow);
+        Debug.Log("dentro de glowturn: currentTurn vale: " + currentTurn );
+
+        GameObject[] allTurnChilds = new GameObject[currentTurn.transform.childCount];
+
+        for (int i = 0; i < currentTurn.transform.childCount; i++) 
+        {
+            // Usamos GetChild(i) a través del transform
+            allTurnChilds[i] = currentTurn.transform.GetChild(i).gameObject;
+        }      
+        
+        GameObject[] allBetPins = new GameObject [allTurnChilds[1].transform.childCount];
+
+        for (int j = 0; j < allTurnChilds[1] .transform.childCount; j++) 
+        {
+            // Usamos GetChild(i) a través del transform
+            allBetPins[j] = allTurnChilds[1].transform.GetChild(j).gameObject;
+        }
+
+        for (int i = 0; i < allBetPins.Length; i++)
+        {
+            Debug.Log("en el for con el elemento allBetPins " + i );
+        
+            SpriteRenderer m_spriteRenderer = allBetPins[i].transform.GetComponent<SpriteRenderer>();
+
+            if (glow)
+            {   Debug.LogWarning("sr.color inicial es: " + m_spriteRenderer.color);
+                Debug.Log("pinto betpin" + allBetPins[i].name + " de blanco Constants.blanco = " + Constants.blanco );
+                m_spriteRenderer.color = Constants.blanco;
+                Debug.Log("pinto betpin" + allBetPins[i].name + "pintado de " + m_spriteRenderer.color );
+            }
+            
+        }       
+
+    }
     /// <summary>
     /// Suscripción a eventos cuando el objeto se activa.
     /// </summary>
