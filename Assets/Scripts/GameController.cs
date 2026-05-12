@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Controlador principal de la partida. Genera el código secreto, procesa turnos, 
-/// evalúa condiciones de victoria o derrota, y comunica los resultados al BoardManager.
+/// Controlador principal de la partida. Genera el cï¿½digo secreto, procesa turnos, 
+/// evalï¿½a condiciones de victoria o derrota, y comunica los resultados al BoardManager.
 /// </summary>
 public class GameController : MonoBehaviour
 {
 	/// <summary>
-	/// Código secreto generado al inicio de la partida.
+	/// Cï¿½digo secreto generado al inicio de la partida.
 	/// </summary>
 	private int[] secretCodeArray;
 
@@ -19,22 +19,26 @@ public class GameController : MonoBehaviour
 	[SerializeField] private BoardManager boardManagerInstance;
 
 	/// <summary>
-	/// Referencia al controlador de turnos que compara la apuesta con el código secreto.
+	/// Referencia al controlador de turnos que compara la apuesta con el cï¿½digo secreto.
 	/// </summary>
 	[SerializeField] private TurnController turnControllerInstance;
+	/// <summary>
+	/// Referencia al clip de audio musical.
+	/// </summary>
+	[SerializeField] private AudioSource musicaFondo; // Referencia a la mÃºsica
 
 	/// <summary>
-	/// Índice del turno actual.
+	/// ï¿½ndice del turno actual.
 	/// </summary>
 	public int currentTurnIndex = 0;
 
 	/// <summary>
-	/// Número máximo de turnos permitidos en la partida.
+	/// Nï¿½mero mï¿½ximo de turnos permitidos en la partida.
 	/// </summary>
 	[SerializeField] private int maxTurns = 9;
 
 	/// <summary>
-	/// Se ejecuta al inicio de la partida. Genera el código secreto.
+	/// Se ejecuta al inicio de la partida. Genera el cï¿½digo secreto.
 	/// </summary>
 	void Start()
 	{
@@ -42,11 +46,11 @@ public class GameController : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Genera un array de números aleatorios entre minValue y maxValue (ambos inclusivos).
+	/// Genera un array de nï¿½meros aleatorios entre minValue y maxValue (ambos inclusivos).
 	/// </summary>
 	/// <param name="length">Cantidad de elementos a generar</param>
-	/// <param name="minValue">Valor mínimo permitido</param>
-	/// <param name="maxValue">Valor máximo permitido</param>
+	/// <param name="minValue">Valor mï¿½nimo permitido</param>
+	/// <param name="maxValue">Valor mï¿½ximo permitido</param>
 	/// <returns>Array con la secuencia generada</returns>
 	public int[] CodeGenerator(int length, int minValue, int maxValue)
 	{
@@ -59,30 +63,30 @@ public class GameController : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Devuelve el código secreto para que otros componentes puedan acceder a él.
+	/// Devuelve el cï¿½digo secreto para que otros componentes puedan acceder a ï¿½l.
 	/// </summary>
-	/// <returns>El array con el código secreto</returns>
+	/// <returns>El array con el cï¿½digo secreto</returns>
 	public int[] GetSecretCode()
 	{
 		return secretCodeArray;
 	}
 
 	/// <summary>
-	/// Llamado cuando el jugador pulsa el botón de jugar turno.
-	/// Procesa la apuesta, evalúa la respuesta y avanza al siguiente turno o finaliza el juego.
+	/// Llamado cuando el jugador pulsa el botï¿½n de jugar turno.
+	/// Procesa la apuesta, evalï¿½a la respuesta y avanza al siguiente turno o finaliza el juego.
 	/// </summary>
 	public void PlayTurnRequest()
 	{
 		// Obtener la apuesta actual desde el tablero
 		int[] apuesta = boardManagerInstance.GetCurrentBetCode();
 
-		// Evaluar la apuesta contra el código secreto
+		// Evaluar la apuesta contra el cï¿½digo secreto
 		(int negros, int blancos) = turnControllerInstance.SubmitTurn(apuesta);
 
 		// Mostrar la respuesta en el tablero
 		boardManagerInstance.DrawResponse(negros, blancos);
 
-		// Verificar condición de victoria
+		// Verificar condiciï¿½n de victoria
 		if (negros == 4)
 		{
             boardManagerInstance.SecretCodeCoverSwitch();
@@ -97,16 +101,17 @@ public class GameController : MonoBehaviour
     /// <summary>
     /// Finaliza la partida, mostrando el resultado final.
     /// </summary>
-    /// <param name="victoria">True si se ganó la partida, False si se perdió</param>
+    /// <param name="victoria">True si se ganï¿½ la partida, False si se perdiï¿½</param>
     public void EndGameVictory(bool victory)
     {
+		musicaFondo?.Stop(); // Detiene la mÃºsica de fondo
         boardManagerInstance.ShowEndGameAnimation(victory);
     }
 
 
 
 
-    // Aquí se puede implementar: desactivar botones, mostrar UI final, cargar escena, etc.
+    // Aquï¿½ se puede implementar: desactivar botones, mostrar UI final, cargar escena, etc.
     // Ejemplo:
     // UIController.Instance.ShowEndGameScreen(victoria);
     // SceneManager.LoadScene("PantallaFinal");
